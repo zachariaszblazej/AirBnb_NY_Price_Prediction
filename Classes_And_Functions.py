@@ -216,10 +216,11 @@ class MeanImputer(BaseEstimator, TransformerMixin):
     def __init__(self):
         pass
     def fit(self, X, y=None):
+        self.si = SimpleImputer(strategy='mean')
+        self.si.fit(X)
         return self
     def transform(self, X, y=None):
-        si = SimpleImputer(strategy='mean')
-        X_new = pd.DataFrame(columns=X.columns, data=si.fit_transform(X))
+        X_new = pd.DataFrame(columns=X.columns, data=self.si.transform(X))
         return X_new
 
 
@@ -289,7 +290,6 @@ class TrueFalseTransformer(BaseEstimator, TransformerMixin):
 
 def remove_nonnumeric_chars(x):
     if not pd.isna(x):
-        #x = str(x)
         x = x.replace('$', '')
         x = x.replace(',', '')
     return x
